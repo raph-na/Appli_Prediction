@@ -76,3 +76,7 @@ Le projet supporte plusieurs modèles :
 
 ## 👤 Auteur
 * Raphael Njom** - "juniornjom525@gmail.com")
+
+## Aperçu
+![IMG-20251216-WA0005](https://github.com/user-attachments/assets/9b4fc598-e235-4f86-9e1f-f3c405e14595)
+![IMG-20251216-WA0004](https://github.com/user-attachments/assets/bd7d2213-b034-43ed-8b0c-eb94bc31b778)

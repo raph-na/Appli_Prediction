@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prévision des ventes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_acceuil.css') }}">
+
+</head>
+<body>
+    <!-- Barre de navigation -->
+     <nav class="navbar">
+        
+     <div class="logo">Prévisions</div>
+        <ul class="nav-links">
+            <li><a id="monLien" href="/gestion_acceuil" onclick="rediriger_vers_acceuil()">Accueil</a></li>
+            <li><a id="monLien" href="/gestion_importation" onclick="rediriger_vers_importation()">Importations</a></li>
+            <li><a id="monLien" href="/gestion_prediction" onclick="rediriger_vers_prediction()">Prédiction</a></li>
+            <li><a href="#">Rapports</a></li>
+            <li><a href="#">Clients</a></li>
+            <li><a href="#">Paramètres</a></li>
+        </ul>
+        
+       <div class="search-container">
+                 <input type="text" placeholder="Rechercher...">
+              <button type="submit">Go</button>
+        </div>
+    </nav>
+       
+    
+
+        <nav class="nav-mobile">
+            <details class="nav-details">
+                <summary class="nav-summary"></summary>
+                <ul class="nav-mobile-menu">
+                    <li class="nav-mobile-item"><a href="accueil.html" class="nav-mobile-link">Accueil</a></li>
+                    <li class="nav-mobile-item"><a href="importation.html" class="nav-mobile-link">Importations</a></li>
+                    <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Analyses</a></li>
+                    <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Rapports</a></li>
+                    <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Clients</a></li>
+                    <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Paramètres</a></li>
+                </ul>
+            </details>
+             <div class="search-container">
+                 <input type="text" placeholder="Rechercher...">
+              <button type="submit">Go</button>
+            </div>
+        </div>
+        </nav>
+        
+
+
+    <!-- Section d'accueil -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Prévision des ventes</h1>
+            <p>Optimisez vos stratégies commerciales grâce à nos outils d'analyse prédictive et de prévision des ventes.</p>
+        </div>
+    </section>
+
+    <!-- Section de contenu -->
+    <section class="content-section">
+        <h2>Nos fonctionnalités</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>Analyse prédictive</h3>
+                <p>Utilisez l'intelligence artificielle pour anticiper les tendances du marché et les comportements d'achat.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Tableaux de bord interactifs</h3>
+                <p>Visualisez vos données de vente en temps réel avec des graphiques et indicateurs personnalisables.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Rapports automatiques</h3>
+                <p>Générez automatiquement des rapports détaillés sur vos performances commerciales.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Nettoyage automatiques</h3>
+                <p>nettoyer automatiquement vos dataset en un seul click grace a des fonctions de pretraitement avancé</p>
+            </div>
+            <div class="feature-card">
+                <h3>Encodage automatiques</h3>
+                <p>Encodez vos données catégorielle sans crainte </p>
+            </div>
+            <div class="feature-card">
+                <h3>Visualisations</h3>
+                <p>Visualisez les correlations , les pertineces de chacune de vos features</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Prévision des ventes. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Animation simple pour le titre
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('.hero-content h1');
+            title.style.opacity = '0';
+            title.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                title.style.transition = 'opacity 1s ease, transform 1s ease';
+                title.style.opacity = '1';
+                title.style.transform = 'translateY(0)';
+            }, 300);
+        });
+
+        function rediriger_vers_importation(){
+            window.location.href = "/gestion_importation"
+        }
+       function rediriger_vers_prediction(){
+            window.location.href = "/gestion_prediction"
+        }
+               function rediriger_vers_acceuil(){
+            window.location.href = "/gestion_acceuil"
+        }
+
+    </script>
+</body>
+</html>

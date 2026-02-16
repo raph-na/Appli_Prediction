@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+
+</style>
+<body>
+       
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="logo">Prévisions</div>
+        <ul class="nav-links">
+            <li><a id="monLien" href="/gestion_acceuil" onclick="rediriger_vers_acceuil()">Accueil</a></li>
+            <li><a id="monLien" href="/gestion_importation" onclick="rediriger_vers_importation()">Importations</a></li>
+            <li><a id="monLien" href="/gestion_prediction" onclick="rediriger_vers_prediction()">Prédiction</a></li>
+            <li><a href="#">Analyses</a></li>
+            <li><a href="#">Rapports</a></li>
+            <li><a href="#">Clients</a></li>
+            <li><a href="#">Paramètres</a></li>
+        </ul>
+        
+        <div class="search-container">
+            <input type="text" placeholder="Rechercher...">
+            <button type="submit">Go</button>
+        </div>
+    </nav>
+       
+    <nav class="nav-mobile">
+        <details class="nav-details">
+            <summary class="nav-summary"></summary>
+            <ul class="nav-mobile-menu">
+                <li class="nav-mobile-item"><a href="/" class="nav-mobile-link">Accueil</a></li>
+                <li class="nav-mobile-item"><a href="/" class="nav-mobile-link">Importations</a></li>
+                <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Analyses</a></li>
+                <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Rapports</a></li>
+                <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Clients</a></li>
+                <li class="nav-mobile-item"><a href="#" class="nav-mobile-link">Paramètres</a></li>
+            </ul>
+        </details>
+        <div class="search-container">
+            <input type="text" placeholder="Rechercher...">
+            <button type="submit">Go</button>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Importations des données</h1>
+        </div>
+    </section>
+      
+    <p class="haut">Il s'agit de la première étape qui vous permettra de faire votre prédiction. 
+        Vous pouvez importer vos données dans plusieurs formats : CSV, Excel, JSON, etc.
+    </p>
+
+    <div class="container">
+        <h1>Importer votre fichier</h1>
+
+        <form method="POST" action="/importer" enctype="multipart/form-data" id="uploadForm">
+            <input type="file" name="fichier"  id="fileInput" 
+                   accept=".csv,.xlsx,.xls,.json">
+            <button type="submit" name="pretrait" value="analyser">Commencer l'Analyse</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% if filename %}
+        <div class="success">
+            <p> Fichier <strong>{{ filename }}</strong> importé avec succès !</p>
+            <p>{{ shape }}</p>
+        </div>
+        
+        {% endif %}
+        
+    <span id="fileName"></span>
+    {% if fichier_upload %}
+    
+    <div>
+         <form method="POST" action="/nettoyer"  id="nettoyerForm">
+             <button type="submit" id="nettoi" name="pretrait" value="nettoi">Nettoyage Automatique</button>
+        </form>
+        
+        <form method="POST" action="/encoder"  id="encoderForm">
+           <button type="submit" id="encode" name="pretrait" value="encode">Encodage</button>
+        </form>
+
+     <form method="POST" action="/Analyser"  id="encoderForm">
+        <select name="date" id="date">
+            <option value="">Sélectionner la colonne date</option>
+            {% for column in columns %}
+                <option value="{{ column }}" {% if column == date_column %}selected{% endif %}>{{ column }}</option>
+            {% endfor %}
+         </select><br><br>            
+           <button type="submit" id="encode" name="Analyser" value="encode">Analyse complète</button>
+        </form>
+    </div>
+    {% endif %}
+
+    </div>
+
+    <div>
+    <!-- Section d'exploration des données -->
+    {% if fichier_upload %}
+    <section class="content-section">
+        <div class="exp">
+            <h1>Exploration de la dataset</h1> 
+        </div>
+        
+        <!-- Statistiques générales -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Lignes</h4>
+                <div class="stat-value">{{ row_count }}</div>
+             </div>
+
+              <div class="stat-card">
+                 <h4>Colonnes</h4>
+                <div class="stat-value">{{ col_count }}</div>
+             </div>
+
+            <div class="stat-card">
+                <h4>Doublons</h4>
+                <div class="stat-value">{{ doublons }}</div>
+            </div>
+            
+            <div class="stat-card">
+                <h4>manquants</h4>
+                <div class="stat-value">{{ isnull_sum }}</div>
+            </div>
+            <div class="stat-card">
+                <h4>Colonnes numériques</h4>
+                <div class="stat-value">{{ numeric_cols|length }}</div>
+            </div>
+        </div>
+        
+        <!-- Liste des colonnes -->
+        <div class="results">
+            <h3>Colonnes du dataset ({{ columns|length }})</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                {% for col in columns %}
+                <div style="background: #4a6fa5; color: rgb(255, 255, 255); padding: 5px 10px; border-radius: 4px;">
+                    {{ col }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Aperçu du dataset -->
+
+            <h2>Aperçu de la dataset</h2>
+            
+            <h3>Premières lignes (head)</h3>
+            <div class="tab">{{ head|safe }}</div>
+            
+            <h3>Dernières lignes (tail)</h3>
+            <div class="tab">{{ tail|safe }}</div>
+            
+            <h3>Informations sur le DataFrame</h3>
+            <div class="info-output">{{ info }}</div>
+            
+            <h3>Statistiques descriptives</h3>
+            {% if describe != "Aucune colonne numérique" %}
+                <div class="tab">{{ describe|safe }}</div>
+            {% else %}
+                <p>Aucune colonne numérique dans le dataset</p>
+            {% endif %}
+            
+            <h3>Valeurs manquantes</h3>
+            <div class="tab">{{ isnull|safe }}</div>
+            
+        </div>
+          </section>
+    {% endif %}
+
+        <!-- Section pour les graphiques (à implémenter) -->
+        
+     {% if date_column %}
+            <h1 >📊 Visualisations graphique matplotlib</h1>
+                <h2 id="heat">HEATMAP</h2>
+            <div id="heatm">
+                <img  src="data:image/png;base64,{{ plot_url }}" alt="Graphique">
+            </div>
+               <h2 id="heat">HEATMAP des Valeurs manquantes</h2>
+            <div id="heatm">
+                <img  src="data:image/png;base64,{{ heatmap_manquants }}" alt="Graphique">
+            </div>
+           <h2 id="heat">Graphique</h2>
+            <div id="heatm">
+                <img  src="data:image/png;base64,{{ pairplot }}" alt="Graphique">
+            </div>
+         <h2 id="hist">HISTOGRAMME</h2>
+        {% for hist in histogram_urls %}
+            <div id="pad">       
+                <img src="data:image/png;base64,{{ hist }}" alt="histogramme">
+            </div>
+        {% endfor %}
+         <h2 id="hist">HISTOGRAMME</h2>
+        {% for histo in histogram_temporals %}
+            <div id="pad">       
+                <img src="data:image/png;base64,{{ histo }}" alt="histogramme">
+            </div>
+        {% endfor %}
+                          
+     {% endif %}
+
+        
+  
+
+
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Prévision des ventes. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+    // JavaScript pour afficher le nom du fichier
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : "Aucun fichier sélectionné";
+        document.getElementById('fileName').textContent = "📁 Fichier : " + fileName;
+        document.getElementById('fileName').style.color = "rgb(255, 255, 255)";
+        document.getElementById('fileName').style.fontWeight = "bold";
+    });
+    
+let clickedAction = null;
+
+document.querySelectorAll("button[name='pretrait']").forEach(btn => {
+    btn.addEventListener("click", () => {
+        clickedAction = btn.value;
+    });
+});
+
+document.getElementById("uploadForm").addEventListener("submit", function(e) {
+    const fileInput = document.getElementById("fichier");
+
+    if (clickedAction === "analyser" && fileInput.files.length === 0) {
+        e.preventDefault();
+        alert("Veuillez sélectionner un fichier avant l'analyse");
+    }
+});
+    
+
+        function rediriger_vers_importation(){
+            window.location.href = "/gestion_importation"
+        }
+       function rediriger_vers_prediction(){
+            window.location.href = "/gestion_prediction"
+        }
+               function rediriger_vers_acceuil(){
+            window.location.href = "/gestion_acceuil"
+        }
+    
+   
+    </script>
+</body>
+</html>

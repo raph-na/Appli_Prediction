@@ -1,0 +1,40 @@
+<!-- templates/datasets.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mes Datasets</title>
+</head>
+<body>
+    <h1>Mes Datasets</h1>
+    
+    {% if datasets %}
+        <table border="1">
+            <tr>
+                <th>Fichier</th>
+                <th>Lignes</th>
+                <th>Colonnes</th>
+                <th>Créé le</th>
+                <th>Actions</th>
+            </tr>
+            {% for ds in datasets %}
+            <tr>
+                <td>{{ ds.filename or 'Sans nom' }}</td>
+                <td>{{ ds.rows }}</td>
+                <td>{{ ds.cols }}</td>
+                <td>{{ ds.created_at }}</td>
+                <td>
+                    <form action="/charger-dataset" method="POST">
+                        <input type="hidden" name="dataset_id" value="{{ ds.id }}">
+                        <button type="submit">Charger</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucun dataset sauvegardé</p>
+    {% endif %}
+    
+    <a href="/">Retour</a>
+</body>
+</html>
